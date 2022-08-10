@@ -94,9 +94,26 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 	// fill collada db
 	collada_db = collada_core.getDatabase();
 
-	// NOTE:
-	// do we need version, identity, unit scale, up direction?
-	// doesn't seem like we do, but this here would be the space for them if yes.
+	// NOTE: daeloader doesn't actually seem to fail on any sort of version mismatch.
+	// so why should we?
+
+	// NOTE: do we have to silently fix incorrect up vector, or maybe should our
+	// distinguished expert mesher users learn to export correctly? *thonk*
+
+	// grabbing meter scale
+	auto dom_unit_ptr = daeSafeCast<domAsset::domUnit>
+		(collada_document_root->getDescendant(daeElement::matchType(domAsset::domUnit::ID())));
+
+	if (dom_unit_ptr)
+	{
+		auto meter = dom_unit_ptr->getMeter();
+		pushLog("DAE Importer", "Scale data found, Meter is equal to " + std::to_string(meter));
+		data->setMeterLength(meter);
+	}
+	else
+	{
+		pushLog("DAE Importer", "Scale data not found, using default meter value.");
+	}
 
 	size_t mesh_amount = collada_db->getElementCount(NULL, COLLADA_TYPE_MESH);
 	size_t skin_amount = collada_db->getElementCount(NULL, COLLADA_TYPE_SKIN);

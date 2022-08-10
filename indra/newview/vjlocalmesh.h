@@ -195,6 +195,9 @@ class LLLocalMeshFile
 		std::string getFilename(LLLocalMeshFileLOD lod) { return mFilenames[lod]; };
 		LLUUID getFileID() { return mLocalMeshFileID; };
 		std::vector<std::string> getFileLog() { return mLoadingLog; };
+		
+		// this feel like java and i hate it
+		void setMeterLength(float length) { mMeterLength = length; };
 
 		// viewer object
 		void updateVObjects();
@@ -214,6 +217,7 @@ class LLLocalMeshFile
 		LLLocalMeshFileStatus mLocalMeshFileStatus;
 		LLUUID mLocalMeshFileID;
 		bool mLocalMeshFileNeedsUIUpdate;
+		float mMeterLength;
 
 		std::future<LLLocalMeshLoaderReply> mAsyncFuture;
 		std::vector<std::unique_ptr<LLLocalMeshObject>> mLoadedObjectList;

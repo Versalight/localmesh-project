@@ -357,6 +357,8 @@ LLLocalMeshFile::LLLocalMeshFile(std::string filename, bool try_lods)
 	mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_NONE;
 	mLocalMeshFileID.setNull();
 	mLocalMeshFileNeedsUIUpdate = false;
+	mMeterLength = 1.0f; // NOTE: default magic number?
+
 	mLoadedObjectList.clear();
 	mSavedObjectSculptIDs.clear();
 
@@ -764,7 +766,7 @@ void LLLocalMeshFile::applyToVObject(LLUUID viewer_object_id, int object_index, 
 	if ((!target_object->isAttachment()) && use_scale)
 	{
 		auto scale = mLoadedObjectList[object_index]->getObjectSize();
-		scale *= 0.01; /* NOTE: magic number */
+		scale *= mMeterLength;
 		target_object->setScale(LLVector3(scale), false);
 	}
 
